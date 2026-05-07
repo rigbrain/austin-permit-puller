@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Output (the script writes here by default; let users opt in to committing)
+out/
+!out/.gitkeep
+
+# Editors
+.vscode/
+.idea/
+*.swp
+.DS_Store

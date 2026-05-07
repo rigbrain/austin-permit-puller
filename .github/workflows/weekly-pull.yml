@@ -1,0 +1,50 @@
+# Sample GitHub Action: weekly Austin permit pull.
+# Runs Mondays at 12:00 UTC (~6am Central during DST, 7am during standard time).
+# Commits the regenerated CSV + JSON back to the repo so anyone can browse them.
+#
+# Adapt the schedule, lookback window, and value floor as you like.
+
+name: Weekly permit pull
+
+on:
+  schedule:
+    - cron: '0 12 * * 1'
+  workflow_dispatch:    # lets you trigger manually from the Actions tab
+
+permissions:
+  contents: write    # needed to commit back to the repo
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run permit puller
+        run: |
+          mkdir -p out
+          python permit_pull.py --days 60 --min-value 1000000
+
+      - name: Copy timestamped output to "latest" for stable URL
+        run: |
+          cp out/austin_permits_*.csv  out/austin_permits_latest.csv  || true
+          cp out/austin_permits_*.json out/austin_permits_latest.json || true
+
+      - name: Commit regenerated files
+        run: |
+          git config user.name  "permit-puller-bot"
+          git config user.email "bot@example.com"
+          git add out/
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Auto: weekly permit pull $(date -u +%Y-%m-%d)"
+            git push
+          fi
