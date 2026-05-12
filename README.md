@@ -1,5 +1,9 @@
 # Austin Permit Puller
 
+[![weekly-pull](https://github.com/rigbrain/austin-permit-puller/actions/workflows/weekly-pull.yml/badge.svg)](https://github.com/rigbrain/austin-permit-puller/actions/workflows/weekly-pull.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+
 A small Python script that pulls commercial building permits from the City of Austin's Open Data feed, scores them for heavy-equipment-purchase intent, and writes CSV + JSON.
 
 The data is public ([data.austintexas.gov](https://data.austintexas.gov/Building-and-Development/Issued-Construction-Permits/3syk-w9eu)) — this just makes it useful. Run it weekly, get a fresh list of who pulled commercial permits in Austin and what they're likely to need.
@@ -17,7 +21,7 @@ For each permit returned:
 ## Quick start
 
 ```bash
-git clone https://github.com/<your-org>/austin-permit-puller.git
+git clone https://github.com/rigbrain/austin-permit-puller.git
 cd austin-permit-puller
 python permit_pull.py
 ```
@@ -85,6 +89,26 @@ The script makes a single HTTP request per run to the public Austin SODA endpoin
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+## Help wanted: other metros
+
+Austin's permit feed is the easiest case — it's a single SODA endpoint, no auth, well-documented. Other metros have their own permit data but different shapes. If you want to add one, the wedge code lives in `permit_pull.py` — fork it, swap the endpoint + field names, open a PR.
+
+Metros we'd love to see covered next (open issues for each):
+
+| Metro | Source | Status |
+|---|---|---|
+| Houston, TX | data.houstontx.gov | Help wanted |
+| Dallas, TX | dallasopendata.com | Help wanted |
+| Phoenix, AZ | phoenixopendata.com | Help wanted |
+| Atlanta, GA | data.cityofatlanta.com | Help wanted |
+| Charlotte, NC | data.charlottenc.gov | Help wanted |
+| Nashville, TN | data.nashville.gov | Help wanted |
+| Denver, CO | denvergov.org/opendata | Help wanted |
+| Tampa, FL | data.tampagov.net | Help wanted |
+| Orlando, FL | data.cityoforlando.net | Help wanted |
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add a metro.
 
 ## Contact
 
