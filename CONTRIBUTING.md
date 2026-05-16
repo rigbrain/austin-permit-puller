@@ -1,34 +1,30 @@
 # Contributing
 
-PRs and issues welcome. Two kinds of contribution are most useful:
+PRs and issues welcome. Two kinds of contribution are most useful.
 
 ## 1. Add a metro
 
-The Austin SODA endpoint is the easy case. Other metros publish permit data in different shapes — some SODA, some ArcGIS, some plain JSON. Adding one means:
+If your city publishes commercial building permits as a public open-data feed, adding it is a `fetch_<metro>` + `normalize_<metro>` pair in `permit_pull.py` and a new entry in the `METROS` dict. No new dependencies.
 
-1. Find the metro's open-data permit endpoint (most major US cities publish one).
-2. Add a new fetch function modeled on `fetch_austin_permits()` in `permit_pull.py` that returns the same row shape: `permit_number, address, zip, description, valuation, sqft, floors, work_class, permit_class, issue_date, contractor_company, contractor_name, contractor_phone, contractor_city, permit_link`.
-3. Wire it up behind a `--metro <name>` flag.
-4. Add a row to the metro coverage table in the README.
-5. Add a sample CSV/JSON to `examples/<metro>_sample.csv`.
-6. Open a PR.
+The row contract is the dict shape returned by `normalize_austin` / `normalize_orlando` in `permit_pull.py`. All keys must be present. Strings can be empty if the source doesn't publish that field — `contractor_phone` is empty for Orlando, for example. Scoring degrades gracefully when fields are missing.
 
-Metros currently open for contribution: Houston, Dallas, Phoenix, Atlanta, Charlotte, Nashville, Denver, Tampa, Orlando. The corresponding GitHub issues describe each metro's data source.
+What to do:
 
-## 2. Tune the scoring rubric
+1. Find the city's per-permit commercial building permit feed. Not all cities have one — see the table below for the gotchas across the top 10 US metros we looked at.
+2. Implement `fetch_<metro>(days_back, min_value)` returning the raw API rows.
+3. Implement `normalize_<metro>(permits)` returning the common row shape.
+4. Register both in the `METROS` dict at the bottom of `permit_pull.py`.
+5. Run `python permit_pull.py --metro <name> --days 30` and commit one fresh sample to `examples/<metro>_sample_output.csv`.
+6. Add a row to the metro coverage table in the README, including which columns are empty.
+7. Open a PR.
 
-The rubric in the README is rules-based v1. If you've run the puller against a real dealer or contractor outreach list and your closed-loop data suggests different weights, that's the kind of signal this repo wants. Open an issue with your data shape and proposed weight changes, or open a PR against the `SCORING_RULES` block in `permit_pull.py`.
+### What we found across the top 10 US metros
 
-## Style
-
-- Python 3.10+, stdlib only (no third-party dependencies). This is a hard rule — adding `requests` or `pandas` would defeat the "single-file, no install dance" property that makes this useful.
-- Match the existing code style. No introduction of frameworks, classes, or abstractions unless the second metro demands it.
-- One PR = one change. Don't bundle "add Houston" with "refactor scoring" — those are separate PRs.
-
-## Reporting bugs
-
-Open an issue with: a minimal repro command, the actual output, and the expected output. If the bug is "the API returned something weird," include the raw permit JSON snippet.
-
-## Code of conduct
-
-Be useful and direct. Don't waste contributors' time with bikeshedding.
+| Metro     | Source check (May 2026)                                                                 |
+|-----------|------------------------------------------------------------------------------------------|
+| Austin    | ✅ Socrata `3syk-w9eu`, per-permit, fresh                                                |
+| Orlando   | ✅ Socrata `ryhf-m453`, application-stage, fresh — implemented                            |
+| Houston   | ⚠️ CKAN; only monthly residential aggregates — no per-permit commercial feed found       |
+| Dallas    | ⚠️ Socrata `e7gq-4sah` exists but the dataset has been frozen since Aug 30, 2020         |
+| Phoenix   | ⚠️ Catalog API returns 403; permits live behind Accela CitizenAccess                     |
+| Atlanta   | ⚠️ No Socrata catalog; check ArcGIS feature services                
