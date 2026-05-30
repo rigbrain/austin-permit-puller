@@ -1,6 +1,6 @@
 # Permit Puller
 
-[![weekly-pull](https://github.com/flyingmiata-droid/austin-permit-puller/actions/workflows/weekly-pull.yml/badge.svg)](https://github.com/flyingmiata-droid/austin-permit-puller/actions/workflows/weekly-pull.yml)
+[![weekly-pull](https://github.com/rigbrain/austin-permit-puller/actions/workflows/weekly-pull.yml/badge.svg)](https://github.com/rigbrain/austin-permit-puller/actions/workflows/weekly-pull.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
@@ -23,7 +23,7 @@ For each permit returned:
 ## Quick start
 
 ```bash
-git clone https://github.com/flyingmiata-droid/austin-permit-puller.git
+git clone https://github.com/rigbrain/austin-permit-puller.git
 cd austin-permit-puller
 python permit_pull.py                       # Austin, last 7 days, $1M+
 python permit_pull.py --metro orlando       # Orlando instead
