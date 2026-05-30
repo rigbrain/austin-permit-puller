@@ -1,12 +1,14 @@
 # Permit Puller
 
-[![weekly-pull](https://github.com/rigbrain/austin-permit-puller/actions/workflows/weekly-pull.yml/badge.svg)](https://github.com/rigbrain/austin-permit-puller/actions/workflows/weekly-pull.yml)
+[![weekly-pull](https://github.com/flyingmiata-droid/austin-permit-puller/actions/workflows/weekly-pull.yml/badge.svg)](https://github.com/flyingmiata-droid/austin-permit-puller/actions/workflows/weekly-pull.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
 A small Python script that pulls commercial building permits from US city open-data feeds, scores them for heavy-equipment-purchase intent, and writes CSV + JSON.
 
 No API keys. No dependencies outside the Python stdlib. Python 3.10+.
+
+**See it live:** [rigbrain.io/austin/](https://rigbrain.io/austin/) — this week's Austin permits, scored and rendered. Updated every Monday by the GitHub Action in this repo.
 
 **Currently supports: Austin and Orlando.** Adding more metros is documented below — the short version is that "fork it and swap the endpoint" is the easy case (Austin → Orlando) but most other US cities require a separate adapter because they don't publish per-permit commercial data in the same shape. See [Why this is harder than it sounds](#why-this-is-harder-than-it-sounds).
 
@@ -21,7 +23,7 @@ For each permit returned:
 ## Quick start
 
 ```bash
-git clone https://github.com/rigbrain/austin-permit-puller.git
+git clone https://github.com/flyingmiata-droid/austin-permit-puller.git
 cd austin-permit-puller
 python permit_pull.py                       # Austin, last 7 days, $1M+
 python permit_pull.py --metro orlando       # Orlando instead
@@ -92,4 +94,24 @@ Note: metros without a floors field (e.g., Orlando) won't trigger the vertical-w
 
 ## Equipment lexicon
 
-The keyword-to-equipment mapping lives in `EQUIPMENT_LEXICON` at the top of `permit_pull.py`. Edit in place if you want to tune 
+The keyword-to-equipment mapping lives in `EQUIPMENT_LEXICON` at the top of `permit_pull.py`. Edit in place if you want to tune it for your equipment mix.
+
+## API responsibility
+
+The script makes a single HTTP request per metro per run, with `$limit=200`. No parallelism, no retry storms, no auth required. If you run it more often than weekly, that's between you and the city's open-data terms of service.
+
+## Automation
+
+[`.github/workflows/weekly-pull.yml`](.github/workflows/weekly-pull.yml) is a sample GitHub Action that runs the puller every Monday at 6 a.m. Central and commits the output back to the repo. Adapt as needed.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
+
+## Why this exists
+
+I run [RigBrain](https://rigbrain.io) — a weekly permit-lead service for heavy-equipment dealers. The Austin and Orlando pullers in this repo are the same code paths that produce the data we sell. The work we actually charge for is the curation, the per-dealer filtering, the contractor enrichment for fields the public feeds don't publish, and the weekly delivery. The raw data is public, so the puller is open.
+
+## Contact
+
+Issues and PRs welcome. Built by Nick Kaufman — [nick@rigbrain.io](mailto:nick@rigbrain.io)
