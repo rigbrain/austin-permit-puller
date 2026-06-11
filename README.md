@@ -8,7 +8,9 @@ A small Python script that pulls commercial building permits from US city open-d
 
 No API keys. No dependencies outside the Python stdlib. Python 3.10+.
 
-**See it live:** [rigbrain.io/austin/](https://rigbrain.io/austin/) — this week's Austin permits, scored and rendered. Updated every Monday by the GitHub Action in this repo.
+> **Status: archived / maintenance.** The commercial product this came from (RigBrain) was discontinued in June 2026. The puller stands on its own — the code works, the feeds are public, and it's MIT-licensed. Fork it, adapt it, run it. Issues and PRs may not get a fast response.
+
+**See it live:** [rigbrain.io/austin/](https://rigbrain.io/austin/) — a sample of Austin permits, scored and rendered.
 
 **Currently supports: Austin and Orlando.** Adding more metros is documented below — the short version is that "fork it and swap the endpoint" is the easy case (Austin → Orlando) but most other US cities require a separate adapter because they don't publish per-permit commercial data in the same shape. See [Why this is harder than it sounds](#why-this-is-harder-than-it-sounds).
 
@@ -110,7 +112,7 @@ MIT. See [LICENSE](LICENSE).
 
 ## Why this exists
 
-I run [RigBrain](https://rigbrain.io) — a weekly permit-lead service for heavy-equipment dealers. The Austin and Orlando pullers in this repo are the same code paths that produce the data we sell. The work we actually charge for is the curation, the per-dealer filtering, the contractor enrichment for fields the public feeds don't publish, and the weekly delivery. The raw data is public, so the puller is open.
+This was the data engine behind RigBrain — a weekly permit-lead service for heavy-equipment dealers (2026, discontinued). The Austin and Orlando pullers in this repo were the same code paths that produced the data the service sold. The paid work was the curation, the per-dealer filtering, the contractor enrichment for fields the public feeds don't publish, and the weekly delivery. The raw data is public, so the puller is open — and it stays open as a standalone tool.
 
 ## Contact
 
